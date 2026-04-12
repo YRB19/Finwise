@@ -9,7 +9,7 @@ const API_KEY  = "d76ip19r01qtg3ndorpgd76ip19r01qtg3ndorq0";
 const BASE_URL = "https://finnhub.io/api/v1";
 
 // Default watchlist
-const WATCHLIST = ["AAPL", "GOOGL", "MSFT", "TSLA", "AMZN", "META"];
+const WATCHLIST = ["AAPL", "GOOGL", "MSFT", "TSLA", "AMZN", "META", "AVG0", "BABA", "DIS", "NFLX"];
 
 // Company name lookup (Finnhub quote endpoint doesn't return names)
 const COMPANY_NAMES = {
@@ -19,8 +19,11 @@ const COMPANY_NAMES = {
   TSLA:  "Tesla Inc.",
   AMZN:  "Amazon.com Inc.",
   META:  "Meta Platforms Inc.",
+  AVG0 : "AVG Technologies",
+  BABA : "Alibaba Group Holding Ltd",
+  DIS  : "The Walt Disney Company",
+  NFLX : "Netflix Inc.",
 };
-
 // Holds the raw watchlist data so we can re-sort/filter without re-fetching
 let watchlistData = [];
 
