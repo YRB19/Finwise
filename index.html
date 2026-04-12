@@ -1,379 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Finwise</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-
-    header {
-      background-color: #1a1a2e;
-      color: white;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    header h1 {
-      font-size: 1.4rem;
-    }
-
-    header span {
-      font-size: 0.85rem;
-      color: #aaa;
-    }
-
-    .search-section {
-      background-color: #fff;
-      padding: 16px 24px;
-      border-bottom: 1px solid #ddd;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .search-section input {
-      padding: 8px 12px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 200px;
-    }
-
-    .search-section button {
-      padding: 8px 16px;
-      background-color: #1a1a2e;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.95rem;
-    }
-
-    .search-section button:hover {
-      background-color: #16213e;
-    }
-
-    .search-section p {
-      font-size: 0.85rem;
-      color: #888;
-    }
-
-    .container {
-      padding: 24px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 16px;
-      color: #444;
-    }
-
-    .stocks-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
-    }
-
-    .stock-card {
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 16px;
-    }
-
-    .stock-card .symbol {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #1a1a2e;
-    }
-
-    .stock-card .company-name {
-      font-size: 0.8rem;
-      color: #888;
-      margin-bottom: 12px;
-    }
-
-    .stock-card .price {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-
-    .stock-card .change {
-      font-size: 0.9rem;
-      margin-bottom: 12px;
-      font-weight: bold;
-    }
-
-    .change.positive {
-      color: #2e7d32;
-    }
-
-    .change.negative {
-      color: #c62828;
-    }
-
-    .stock-card .details {
-      font-size: 0.82rem;
-      color: #666;
-      line-height: 1.7;
-      border-top: 1px solid #eee;
-      padding-top: 10px;
-    }
-
-    .stock-card .details span {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .loading-text {
-      text-align: center;
-      color: #888;
-      padding: 40px;
-      font-size: 0.95rem;
-    }
-
-    .error-msg {
-      background-color: #fdecea;
-      border: 1px solid #f5c6cb;
-      color: #c62828;
-      padding: 10px 14px;
-      border-radius: 4px;
-      font-size: 0.9rem;
-      margin-bottom: 16px;
-    }
-
-    .loader {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 3px solid #ccc;
-      border-top-color: #1a1a2e;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      vertical-align: middle;
-      margin-left: 8px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .refresh-btn {
-      background: none;
-      border: 1px solid #ccc;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      color: #555;
-      margin-bottom: 16px;
-    }
-
-    .refresh-btn:hover {
-      background-color: #eee;
-    }
-
-    /* Responsive */
-    @media (max-width: 500px) {
-      .search-section input {
-        width: 100%;
-      }
-      .container {
-        padding: 16px;
-      }
-    }
-  </style>
+  <title>Stock Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <!-- ── HEADER ── -->
   <header>
-    <h1>📈 Finwise</h1>
-    <span id="last-updated">Last updated: —</span>
-  </header>
-
-  <div class="search-section">
-    <input type="text" id="search-input" placeholder="Enter symbol (e.g. NVDA)" />
-    <button onclick="searchStock()">Search</button>
-    <p>Powered by Finnhub API</p>
-  </div>
-
-  <div class="container">
-
-    <div id="error-box" class="error-msg" style="display:none;"></div>
-
-    <!-- Search result card shows here -->
-    <div id="search-result"></div>
-
-    <div class="section-title">Watchlist</div>
-    <button class="refresh-btn" onclick="loadWatchlist()">🔄 Refresh</button>
-    <div id="stocks-grid" class="stocks-grid">
-      <p class="loading-text">Loading stocks... <span class="loader"></span></p>
+    <div class="header-left">
+      <div class="logo">
+        <span class="logo-icon">▲</span>
+        <h1>StockPulse</h1>
+      </div>
+      <span id="last-updated" class="last-updated">—</span>
     </div>
 
+    <div class="header-right">
+      <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+        <span id="theme-icon">☀</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── SEARCH BAR ── -->
+  <div class="search-bar">
+    <div class="search-inner">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Search symbol — try NVDA, NFLX, AMD…"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button id="search-btn" onclick="searchStock()">Search</button>
+    </div>
+    <p class="powered-by">Powered by Finnhub</p>
   </div>
 
-  <script>
-    const API_KEY = "d76ip19r01qtg3ndorpgd76ip19r01qtg3ndorq0";
-    const BASE_URL = "https://finnhub.io/api/v1";
+  <!-- ── MAIN CONTENT ── -->
+  <main class="container">
 
-    // Default watchlist symbols
-    const watchlist = ["AAPL", "GOOGL", "MSFT", "TSLA", "AMZN", "META"];
+    <!-- Error Box -->
+    <div id="error-box" class="error-msg" style="display:none;"></div>
 
-    // Company names map (Finnhub quote doesn't return name)
-    const companyNames = {
-      AAPL: "Apple Inc.",
-      GOOGL: "Alphabet Inc.",
-      MSFT: "Microsoft Corp.",
-      TSLA: "Tesla Inc.",
-      AMZN: "Amazon.com Inc.",
-      META: "Meta Platforms Inc.",
-    };
+    <!-- Search Result -->
+    <section id="search-result" style="display:none;">
+      <div class="section-header">
+        <h2 class="section-title">Search Result</h2>
+        <button class="close-btn" onclick="clearSearch()">✕ Clear</button>
+      </div>
+      <div id="search-result-cards" class="stocks-grid"></div>
+    </section>
 
-    // Fetch a quote for one symbol
-    async function fetchQuote(symbol) {
-      const res = await fetch(`${BASE_URL}/quote?symbol=${symbol}&token=${API_KEY}`);
-      if (!res.ok) throw new Error("API error: " + res.status);
-      const data = await res.json();
-      return data;
-    }
+    <!-- Watchlist Controls -->
+    <div class="section-header">
+      <h2 class="section-title">Watchlist</h2>
+      <div class="controls">
 
-    // Build a stock card element
-    function buildCard(symbol, data) {
-      const { c, d, dp, h, l, o, pc } = data;
+        <!-- Filter Dropdown -->
+        <select id="filter-select" onchange="applyFiltersAndSort()">
+          <option value="all">All</option>
+          <option value="gainers">Gainers ▲</option>
+          <option value="losers">Losers ▼</option>
+        </select>
 
-      // c = current price, d = change, dp = % change
-      // h = high, l = low, o = open, pc = prev close
+        <!-- Sort Dropdown -->
+        <select id="sort-select" onchange="applyFiltersAndSort()">
+          <option value="default">Sort: Default</option>
+          <option value="price-asc">Price ↑</option>
+          <option value="price-desc">Price ↓</option>
+          <option value="change-asc">Change ↑</option>
+          <option value="change-desc">Change ↓</option>
+          <option value="name-asc">Name A–Z</option>
+        </select>
 
-      if (!c || c === 0) {
-        return null; // symbol not found or market closed with no data
-      }
+        <!-- Refresh -->
+        <button class="refresh-btn" onclick="loadWatchlist()">⟳ Refresh</button>
+      </div>
+    </div>
 
-      const isPositive = d >= 0;
-      const changeText = `${isPositive ? "+" : ""}${d.toFixed(2)} (${isPositive ? "+" : ""}${dp.toFixed(2)}%)`;
+    <!-- Stocks Grid -->
+    <div id="stocks-grid" class="stocks-grid">
+      <p class="loading-text">Fetching market data<span class="dots"></span></p>
+    </div>
 
-      const card = document.createElement("div");
-      card.className = "stock-card";
-      card.innerHTML = `
-        <div class="symbol">${symbol}</div>
-        <div class="company-name">${companyNames[symbol] || ""}</div>
-        <div class="price">$${c.toFixed(2)}</div>
-        <div class="change ${isPositive ? "positive" : "negative"}">
-          ${isPositive ? "▲" : "▼"} ${changeText}
-        </div>
-        <div class="details">
-          <span><b>Open</b> <span>$${o.toFixed(2)}</span></span>
-          <span><b>High</b> <span>$${h.toFixed(2)}</span></span>
-          <span><b>Low</b> <span>$${l.toFixed(2)}</span></span>
-          <span><b>Prev Close</b> <span>$${pc.toFixed(2)}</span></span>
-        </div>
-      `;
-      return card;
-    }
+  </main>
 
-    // Load all watchlist stocks
-    async function loadWatchlist() {
-      const grid = document.getElementById("stocks-grid");
-      grid.innerHTML = `<p class="loading-text">Loading stocks... <span class="loader"></span></p>`;
-      hideError();
-
-      try {
-        // Fetch all quotes in parallel
-        const results = await Promise.all(
-          watchlist.map(sym => fetchQuote(sym).then(data => ({ sym, data })).catch(() => null))
-        );
-
-        grid.innerHTML = "";
-
-        results.forEach(item => {
-          if (!item) return;
-          const card = buildCard(item.sym, item.data);
-          if (card) grid.appendChild(card);
-        });
-
-        if (grid.children.length === 0) {
-          grid.innerHTML = `<p class="loading-text">No data available right now. Markets may be closed.</p>`;
-        }
-
-        // Update last-updated time
-        const now = new Date();
-        document.getElementById("last-updated").textContent =
-          "Last updated: " + now.toLocaleTimeString();
-
-      } catch (err) {
-        showError("Failed to load stock data. Check your internet connection or API key.");
-        grid.innerHTML = "";
-      }
-    }
-
-    // Search for a stock symbol
-    async function searchStock() {
-      const input = document.getElementById("search-input").value.trim().toUpperCase();
-      const resultBox = document.getElementById("search-result");
-
-      if (!input) {
-        showError("Please enter a stock symbol.");
-        return;
-      }
-
-      hideError();
-      resultBox.innerHTML = `<p class="loading-text">Searching "${input}"... <span class="loader"></span></p>`;
-
-      try {
-        const data = await fetchQuote(input);
-
-        if (!data.c || data.c === 0) {
-          resultBox.innerHTML = `<div class="error-msg">Symbol "${input}" not found or no data available.</div>`;
-          return;
-        }
-
-        const card = buildCard(input, data);
-        resultBox.innerHTML = `<div class="section-title">Search Result: ${input}</div>`;
-        if (card) resultBox.appendChild(card);
-        resultBox.style.marginBottom = "24px";
-
-      } catch (err) {
-        resultBox.innerHTML = `<div class="error-msg">Could not fetch data for "${input}".</div>`;
-      }
-    }
-
-    // Allow pressing Enter to search
-    document.getElementById("search-input").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") searchStock();
-    });
-
-    function showError(msg) {
-      const box = document.getElementById("error-box");
-      box.textContent = msg;
-      box.style.display = "block";
-    }
-
-    function hideError() {
-      document.getElementById("error-box").style.display = "none";
-    }
-
-    // Load on page start
-    loadWatchlist();
-  </script>
+  <script src="app.js"></script>
 
 </body>
 </html>
