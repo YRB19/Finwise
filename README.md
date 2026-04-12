@@ -74,7 +74,7 @@ Finwise/
 
 The default watchlist includes the following symbols:
 
-Apple (AAPL), Alphabet (GOOGL), Microsoft (MSFT), Tesla (TSLA), Amazon (AMZN), Meta (META), AVG Technologies (AVG0), Alibaba (BABA), Disney (DIS), Netflix (NFLX)
+Apple (AAPL), Alphabet (GOOGL), Microsoft (MSFT), Tesla (TSLA), Amazon (AMZN), Meta (META), AVG Technologies (AVG0), Alibaba (BABA), Disney (DIS)
 
 The watchlist can be modified by editing the `WATCHLIST` array in `app.js`.
 
