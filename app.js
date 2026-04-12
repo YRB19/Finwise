@@ -21,7 +21,7 @@ const COMPANY_NAMES = {
   META:  "Meta Platforms Inc.",
   AVG0 : "AVG Technologies",
   BABA : "Alibaba Group Holding Ltd",
-  DIS  : "The Walt Disney Company",
+  DIS  : "The Walt Disney Company"
 };
 // Holds the raw watchlist data so we can re-sort/filter without re-fetching
 let watchlistData = [];
