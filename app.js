@@ -1,5 +1,5 @@
 /* ============================================================
-   app.js — StockPulse
+   app.js — Finwise
    Features: watchlist, search, sort, filter, dark/light theme
    API: Finnhub (https://finnhub.io)
    ============================================================ */
@@ -31,13 +31,13 @@ const themeBtn  = document.getElementById("theme-toggle");
 const themeIcon = document.getElementById("theme-icon");
 
 function getTheme() {
-  return localStorage.getItem("stockpulse-theme") || "dark";
+  return localStorage.getItem("Finwise-theme") || "dark";
 }
 
 function applyTheme(theme) {
   html.setAttribute("data-theme", theme);
   themeIcon.textContent = theme === "dark" ? "☀" : "☾";
-  localStorage.setItem("stockpulse-theme", theme);
+  localStorage.setItem("Finwise-theme", theme);
 }
 
 function toggleTheme() {
